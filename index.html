@@ -40,6 +40,28 @@
         width: min(1180px, calc(100% - 32px));
         margin: 0 auto;
       }
+      .promo-bar {
+        background: #1b1918;
+        color: #f8f4ef;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      .promo-bar-inner {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+      }
+      .promo-bar a {
+        color: #f0d4a8;
+        border-bottom: 1px solid rgba(240, 212, 168, 0.6);
+      }
 
       header {
         position: sticky;
@@ -188,6 +210,24 @@
         color: var(--muted);
         font-size: 0.88rem;
       }
+      .store-promo-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+      }
+      .store-promo-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(30, 25, 23, 0.05);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-weight: 700;
+      }
+      .store-promo-item strong { color: var(--accent-strong); }
 
       .hero-visual {
         position: relative;
@@ -574,10 +614,11 @@
       }
       .footer-inner {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        gap: 14px;
+        gap: 24px;
         min-height: 82px;
+        padding: 24px 0;
       }
       .footer-brand {
         font-weight: 800;
@@ -588,6 +629,36 @@
         color: var(--muted);
         font-size: 0.95rem;
       }
+      .footer-contact {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: flex-end;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .footer-contact span {
+        display: inline-block;
+        line-height: 1.7;
+      }
+      .footer-social {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+      .footer-social a {
+        color: var(--text);
+        font-weight: 700;
+      }
+      .footer-bottom {
+        border-top: 1px solid var(--border);
+        padding: 18px 0 30px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-align: center;
+      }
 
       @media (max-width: 980px) {
         .hero-layout,
@@ -597,6 +668,13 @@
           grid-template-columns: 1fr;
         }
         .sidebar { position: static; }
+        .footer-inner {
+          flex-direction: column;
+        }
+        .footer-contact,
+        .footer-social {
+          justify-content: flex-start;
+        }
       }
       @media (max-width: 560px) {
         .topbar {
@@ -614,21 +692,26 @@
         .hero-visual {
           min-height: 420px;
         }
-        .footer-inner {
+        .promo-bar-inner {
           flex-direction: column;
-          justify-content: center;
-          padding: 20px 0;
-          text-align: center;
+          gap: 6px;
         }
       }
     </style>
   </head>
   <body>
+    <div class="promo-bar">
+      <div class="promo-bar-inner">
+        <span>Envío gratis en pedidos mayores a $120.000</span>
+        <a href="#shop">Comprar ahora</a>
+      </div>
+    </div>
+
     <header>
       <div class="container topbar">
         <div class="brand" aria-label="Herencia Jeans logo">
           <span class="brand-mark">HJ</span>
-          <span>Herencia Jeans</span>
+          <span>Herencia Jeans 👖</span>
         </div>
         <nav class="nav" aria-label="Navegación principal">
           <a href="#shop">Catálogo</a>
@@ -666,6 +749,11 @@
                 <span>valoración media</span>
               </li>
             </ul>
+            <div class="store-promo-list">
+              <span class="store-promo-item"><strong>6 cuotas</strong> sin interés</span>
+              <span class="store-promo-item"><strong>15% off</strong> efec.</span>
+              <span class="store-promo-item"><strong>10% off</strong> transf.</span>
+            </div>
           </div>
 
           <div class="hero-visual" aria-label="Imagen destacada de moda">
@@ -784,7 +872,7 @@
           </article>
           <article class="info-card">
             <div class="icon">✓</div>
-            <h3>Envios confiables</h3>
+            <h3>Envíos confiables</h3>
             <p>Recibe tus compras con seguimiento claro y una experiencia de compra simple y segura.</p>
           </article>
           <article class="info-card">
@@ -798,9 +886,24 @@
 
     <footer>
       <div class="container footer-inner">
-        <div class="footer-brand">Herencia Jeans</div>
-        <div class="footer-copy">Estilo, comodidad y esencia urbana.</div>
+        <div>
+          <div class="footer-brand">Herencia Jeans 👖</div>
+          <div class="footer-copy">Estilo, comodidad y esencia urbana.</div>
+        </div>
+        <div class="footer-contact">
+          <span>Alfonsina Storni 817 B° Liceo</span>
+          <span>lun - sab de 10.30 a 13.00 / 17.30 - 21.00</span>
+          <span>6 cuotas sin interés</span>
+        </div>
       </div>
+      <div class="container">
+        <div class="footer-social">
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">WhatsApp</a>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2026 Herencia Jeans. Todos los derechos reservados.</div>
     </footer>
 
     <script>
@@ -968,11 +1071,19 @@
           return sum + (product ? product.price * item.quantity : 0);
         }, 0);
 
-        const discount = subtotal >= 150000 ? subtotal * 0.10 : 0;
-        const total = subtotal - discount;
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+        let paymentDiscount = 0;
+
+        if (paymentMethod === 'efectivo') {
+          paymentDiscount = subtotal * 0.15;
+        } else if (paymentMethod === 'transferencia') {
+          paymentDiscount = subtotal * 0.10;
+        }
+
+        const total = subtotal - paymentDiscount;
 
         subtotalValue.textContent = formatCurrency(subtotal);
-        discountValue.textContent = `-${formatCurrency(discount)}`;
+        discountValue.textContent = `-${formatCurrency(paymentDiscount)}`;
         totalValue.textContent = formatCurrency(total);
       }
 
@@ -1026,7 +1137,10 @@
       });
 
       paymentRadios.forEach((radio) => {
-        radio.addEventListener('change', toggleCardFields);
+        radio.addEventListener('change', () => {
+          toggleCardFields();
+          updateTotals();
+        });
       });
 
       document.getElementById('checkoutForm').addEventListener('submit', async (event) => {
