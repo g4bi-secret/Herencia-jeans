@@ -35,7 +35,7 @@
       }
       img { max-width: 100%; display: block; }
       a { text-decoration: none; color: inherit; }
-      button, input, select { font: inherit; }
+      button, input, select, textarea { font: inherit; }
       .container {
         width: min(1180px, calc(100% - 32px));
         margin: 0 auto;
@@ -510,7 +510,8 @@
         text-transform: uppercase;
       }
       .field input,
-      .field select {
+      .field select,
+      .field textarea {
         width: 100%;
         border: 1px solid var(--border);
         border-radius: 12px;
@@ -518,17 +519,25 @@
         background: rgba(16, 15, 14, 0.9);
         color: var(--text);
       }
+      .field textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+      .delivery-options,
       .payment-options {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
+      .delivery-option,
       .payment-option { position: relative; }
+      .delivery-option input,
       .payment-option input {
         position: absolute;
         opacity: 0;
         pointer-events: none;
       }
+      .delivery-option label,
       .payment-option label {
         display: block;
         text-align: center;
@@ -540,26 +549,83 @@
         font-weight: 800;
         color: var(--muted);
       }
+      .delivery-option input:checked + label,
       .payment-option input:checked + label {
         background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
         color: #140f0d;
         border-color: transparent;
       }
+      .payment-options {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .shipping-fields,
       .card-fields,
-      .transfer-details {
+      .transfer-details,
+      .cash-note,
+      .card-notice {
         display: none;
         gap: 14px;
       }
+      .shipping-fields.visible,
       .card-fields.visible,
-      .transfer-details.visible { display: grid; }
+      .transfer-details.visible,
+      .cash-note.visible,
+      .card-notice.visible { display: grid; }
+      .shipping-fields {
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+      }
+      .shipping-grid {
+        display: grid;
+        grid-template-columns: 1fr 120px;
+        gap: 12px;
+      }
+      .cash-note,
+      .card-notice {
+        padding: 12px 14px;
+        border-radius: 12px;
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
+      .cash-note {
+        background: rgba(39, 125, 74, 0.1);
+        border: 1px solid rgba(46, 125, 74, 0.35);
+        color: #d9fbe5;
+      }
+      .card-notice {
+        background: rgba(215, 178, 106, 0.08);
+        border: 1px solid rgba(215, 178, 106, 0.26);
+        color: var(--accent-soft);
+      }
       .transfer-details {
         padding: 16px;
         background: rgba(215, 178, 106, 0.06);
         border: 1px solid rgba(215, 178, 106, 0.2);
         border-radius: 16px;
       }
+      .transfer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .mp-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #3580d9 0%, #1a5bd6 100%);
+        color: white;
+        font-size: 0.9rem;
+        font-weight: 900;
+        box-shadow: 0 10px 20px rgba(53, 128, 217, 0.25);
+      }
       .transfer-details h4 {
-        margin: 0 0 14px;
+        margin: 0;
         color: var(--accent-soft);
         font-size: 1rem;
         letter-spacing: 0.04em;
@@ -584,6 +650,29 @@
         font-weight: 800;
         line-height: 1.5;
         word-break: break-word;
+      }
+      .whatsapp-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        color: white;
+        font-weight: 800;
+        box-shadow: 0 12px 24px rgba(22, 163, 74, 0.2);
+      }
+      .whatsapp-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.18);
+        font-size: 0.9rem;
       }
       .checkout-button {
         background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
@@ -700,7 +789,9 @@
           min-height: auto;
         }
         .nav { width: 100%; justify-content: space-between; }
-        .payment-options { grid-template-columns: 1fr; }
+        .payment-options,
+        .delivery-options,
+        .shipping-grid { grid-template-columns: 1fr; }
         .hero-visual { min-height: 420px; }
         .promo-bar-inner { flex-direction: column; gap: 6px; }
       }
@@ -836,6 +927,43 @@
             </div>
 
             <div class="field">
+              <label>Modo de entrega</label>
+              <div class="delivery-options" id="deliveryMethod">
+                <div class="delivery-option">
+                  <input type="radio" id="pickup" name="deliveryMethod" value="retiro" checked />
+                  <label for="pickup">Retiro en local</label>
+                </div>
+                <div class="delivery-option">
+                  <input type="radio" id="delivery" name="deliveryMethod" value="envio" />
+                  <label for="delivery">Envío a domicilio</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="shipping-fields" id="shippingFields">
+              <div class="field">
+                <label for="street">Calle</label>
+                <input id="street" name="street" type="text" placeholder="Ej: Av. San Martín" />
+              </div>
+
+              <div class="shipping-grid">
+                <div class="field">
+                  <label for="streetNumber">Numeración</label>
+                  <input id="streetNumber" name="streetNumber" type="text" placeholder="1234" />
+                </div>
+                <div class="field">
+                  <label for="apartment">Piso / Dpto</label>
+                  <input id="apartment" name="apartment" type="text" placeholder="B" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="shippingNotes">Observaciones / detalles para el enviador</label>
+                <textarea id="shippingNotes" name="shippingNotes" placeholder="Ej: Dejar en portería, llamar antes, etc."></textarea>
+              </div>
+            </div>
+
+            <div class="field">
               <label for="paymentMethod">Método de pago</label>
               <div class="payment-options" id="paymentMethod">
                 <div class="payment-option">
@@ -844,7 +972,7 @@
                 </div>
                 <div class="payment-option">
                   <input type="radio" id="transfer" name="paymentMethod" value="transferencia" />
-                  <label for="transfer">Transferencia</label>
+                  <label for="transfer">Mercado Pago</label>
                 </div>
                 <div class="payment-option">
                   <input type="radio" id="card" name="paymentMethod" value="tarjeta" />
@@ -853,25 +981,28 @@
               </div>
             </div>
 
+            <div class="cash-note" id="cashNote">
+              Pago en efectivo: retiro en local obligatorio. Si querés pagar en efectivo, no se habilita el envío a domicilio.
+            </div>
+
             <div class="transfer-details" id="transferDetails">
-              <h4>Transferencia Mercado Pago</h4>
+              <div class="transfer-header">
+                <h4>Transferencia Mercado Pago</h4>
+                <span class="mp-badge">MP</span>
+              </div>
               <div class="transfer-row"><span>Alias</span><strong>Montesion.24</strong></div>
               <div class="transfer-row"><span>A nombre de</span><strong>Braian Salomon Schmidt</strong></div>
               <div class="transfer-row"><span>Enviar comprobante</span><strong>brianschmidt10@gmail.com</strong></div>
               <div class="transfer-row"><span>WhatsApp</span><strong>+54 9 3515060531</strong></div>
               <div class="transfer-row"><span>Descuento</span><strong>10% por transferencia</strong></div>
+              <a class="whatsapp-button" id="whatsappConfirmButton" href="#" target="_blank" rel="noreferrer">
+                <span class="whatsapp-icon">💬</span>
+                Confirmar pago por WhatsApp
+              </a>
             </div>
 
-            <div class="card-fields" id="cardFields">
-              <div class="field">
-                <label for="cardNumber">Número de tarjeta</label>
-                <input id="cardNumber" name="cardNumber" type="text" inputmode="numeric" placeholder="1234 5678 9012 3456" />
-              </div>
-
-              <div class="field">
-                <label for="cardName">Titular</label>
-                <input id="cardName" name="cardName" type="text" placeholder="Nombre del titular" />
-              </div>
+            <div class="card-notice" id="cardNotice">
+              Tarjeta de crédito o débito próximamente disponible. Por ahora podés completar la compra por transferencia con Mercado Pago.
             </div>
 
             <button class="checkout-button" type="submit">Finalizar compra</button>
@@ -984,8 +1115,12 @@
       const totalValue = document.getElementById('totalValue');
       const cartCount = document.getElementById('cartCount');
       const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
-      const cardFields = document.getElementById('cardFields');
+      const deliveryRadios = document.querySelectorAll('input[name="deliveryMethod"]');
+      const shippingFields = document.getElementById('shippingFields');
+      const cashNote = document.getElementById('cashNote');
       const transferDetails = document.getElementById('transferDetails');
+      const cardNotice = document.getElementById('cardNotice');
+      const whatsappConfirmButton = document.getElementById('whatsappConfirmButton');
 
       function formatCurrency(value) {
         return new Intl.NumberFormat('es-CL', {
@@ -993,6 +1128,54 @@
           currency: 'CLP',
           maximumFractionDigits: 0
         }).format(value);
+      }
+
+      function buildWhatsAppMessage() {
+        if (!cart.length) {
+          return 'La compra de mi pedido se realizó con éxito. Por favor, confirmá el pago para preparar el envío.';
+        }
+
+        const itemsSummary = cart
+          .map((item) => `${item.name} x${item.quantity}`)
+          .join(', ');
+
+        return `La compra de ${itemsSummary} se realizó con éxito. Por favor, confirmá el pago para preparar el envío y embalar la compra.`;
+      }
+
+      function updateWhatsAppLink() {
+        const message = encodeURIComponent(buildWhatsAppMessage());
+        whatsappConfirmButton.href = `https://wa.me/5493515060531?text=${message}`;
+      }
+
+      function updateDeliveryState() {
+        const selectedDelivery = document.querySelector('input[name="deliveryMethod"]:checked')?.value || 'retiro';
+        const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'efectivo';
+
+        if (selectedDelivery === 'envio') {
+          shippingFields.classList.add('visible');
+        } else {
+          shippingFields.classList.remove('visible');
+        }
+
+        if (selectedPayment === 'efectivo') {
+          cashNote.classList.add('visible');
+          transferDetails.classList.remove('visible');
+          cardNotice.classList.remove('visible');
+
+          if (selectedDelivery === 'envio') {
+            document.getElementById('pickup').checked = true;
+            shippingFields.classList.remove('visible');
+          }
+        } else if (selectedPayment === 'transferencia') {
+          cashNote.classList.remove('visible');
+          transferDetails.classList.add('visible');
+          cardNotice.classList.remove('visible');
+          updateWhatsAppLink();
+        } else {
+          cashNote.classList.remove('visible');
+          transferDetails.classList.remove('visible');
+          cardNotice.classList.add('visible');
+        }
       }
 
       function getFilteredProducts() {
@@ -1088,6 +1271,7 @@
         discountValue.textContent = `-${formatCurrency(discount)}`;
         totalValue.textContent = formatCurrency(total);
         cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        updateWhatsAppLink();
 
         document.querySelectorAll('[data-action="increase"]').forEach((button) => {
           button.addEventListener('click', () => updateQuantity(Number(button.dataset.id), 1));
@@ -1111,29 +1295,55 @@
         renderProducts();
       });
 
+      deliveryRadios.forEach((radio) => {
+        radio.addEventListener('change', () => {
+          updateDeliveryState();
+        });
+      });
+
       paymentRadios.forEach((radio) => {
         radio.addEventListener('change', () => {
-          const selected = radio.value;
-          if (selected === 'tarjeta') {
-            cardFields.classList.add('visible');
-            transferDetails.classList.remove('visible');
-          } else if (selected === 'transferencia') {
-            transferDetails.classList.add('visible');
-            cardFields.classList.remove('visible');
-          } else {
-            cardFields.classList.remove('visible');
-            transferDetails.classList.remove('visible');
-          }
+          updateDeliveryState();
         });
       });
 
       document.getElementById('checkoutForm').addEventListener('submit', (event) => {
         event.preventDefault();
-        alert('Compra finalizada con éxito. En breve te contactaremos para confirmar tu pedido.');
+
+        const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'efectivo';
+        const selectedDelivery = document.querySelector('input[name="deliveryMethod"]:checked')?.value || 'retiro';
+
+        if (selectedPayment === 'efectivo') {
+          if (selectedDelivery !== 'retiro') {
+            alert('Para pagar en efectivo, el pedido debe ser retiro en local.');
+            document.getElementById('pickup').checked = true;
+            updateDeliveryState();
+            return;
+          }
+
+          alert('Pedido confirmado para retiro en local. El dueño te contactará para coordinar la entrega del pedido.');
+          return;
+        }
+
+        if (selectedPayment === 'tarjeta') {
+          alert('Tarjeta de crédito o débito todavía está en desarrollo. Podés completar la compra por Mercado Pago para continuar.');
+          return;
+        }
+
+        if (!cart.length) {
+          alert('Tu carrito está vacío.');
+          return;
+        }
+
+        const message = buildWhatsAppMessage();
+        const url = `https://wa.me/5493515060531?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+        alert('Te redirigimos a WhatsApp para confirmar tu pago y coordinar el envío.');
       });
 
       renderProducts();
       renderCart();
+      updateDeliveryState();
     </script>
   </body>
 </html>
